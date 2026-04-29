@@ -17,7 +17,7 @@ on:
         description: "IAM role ARN for GitHub OIDC (prod)"
         required: false
         type: string
-        default: "arn:aws:iam::123456789012:role/github-oidc-prod"
+        default: "arn:aws:iam::123456789012:role/github-oidc-prod" --add role arn
 
 permissions:
   contents: write

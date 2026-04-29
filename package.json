@@ -1,10 +1,10 @@
 {
-  "name": "orbit-sso-policies-template",
+  "name": "icm-sso-policies-template",
   "private": true,
   "type": "module",
   "scripts": {
     "bootstrap": "node scripts/bootstrap.mjs",
-    "build": "node scripts/run-opa.mjs build -b opa/bundle -o orbit-opa-bundle.tar.gz",
+    "build": "node scripts/run-opa.mjs build -b opa/bundle -o icm-opa-bundle.tar.gz",
     "deploy": "node scripts/deploy-s3.mjs",
     "release": "yarn build && yarn deploy",
     "aws:sso": "aws sso login"

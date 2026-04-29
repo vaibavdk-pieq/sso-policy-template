@@ -20,7 +20,7 @@ on:
         description: "IAM role ARN for GitHub OIDC"
         required: false
         type: string
-        default: "arn:aws:iam::123456789012:role/github-oidc-preprod"
+        default: "arn:aws:iam::123456789012:role/github-oidc-preprod" --add role arn
 
 permissions:
   contents: write

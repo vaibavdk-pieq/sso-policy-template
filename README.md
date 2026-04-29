@@ -13,13 +13,22 @@ This template builds and deploys an OPA bundle from `opa/bundle` to S3.
 
 ## Quick Start
 
-1. Copy your policy/data files under `opa/bundle`.
+1. First, set up this `sso-policies-template` repository.
 2. Install dependencies:
    - `yarn install`
-3. Build bundle:
+3. Run bootstrap from this repo to replace the default `icm` prefix with your dedicated name:
+   - `yarn bootstrap <your-prefix>`
+   - Example: `yarn bootstrap orbit`
+   - This updates `package.json`, deployment defaults, and renames `opa/bundle/icm` to `opa/bundle/<your-prefix>` when present.
+4. Copy/update your policy and data files under `opa/bundle` (including your renamed namespace folder).
+5. Build bundle:
    - `yarn build`
-4. Deploy bundle:
+6. Deploy bundle:
    - `yarn deploy`
+7. Update both GitHub workflows before enabling CI/CD:
+   - `.github/workflows/deploy-preprod.yml`
+   - `.github/workflows/deploy-prod.yml`
+   - Replace default bucket names and AWS role ARNs with your preprod/prod values.
 
 ## Environment Variables
 
@@ -34,4 +43,5 @@ This template builds and deploys an OPA bundle from `opa/bundle` to S3.
 ## Notes
 
 - Update workflow role ARNs in `.github/workflows/*` before using in your AWS account.
+- Ensure `preprod` and `prod` workflow bucket defaults match your selected bootstrap prefix.
 - This template intentionally excludes all editor-related files/scripts.

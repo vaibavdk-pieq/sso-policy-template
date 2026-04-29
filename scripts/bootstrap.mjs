@@ -25,6 +25,16 @@ const packageName = `${prefix}-sso-policies-template`;
 
 await updateDeployScript(join(root, "scripts", "deploy-s3.mjs"), bucketName, bundleName);
 await updatePackageJson(join(root, "package.json"), packageName, bundleName);
+await updateWorkflowBucketDefaults(
+  join(root, ".github", "workflows", "deploy-preprod.yml"),
+  "preprod",
+  prefix,
+);
+await updateWorkflowBucketDefaults(
+  join(root, ".github", "workflows", "deploy-prod.yml"),
+  "prod",
+  prefix,
+);
 await renameBundleNamespaceDir(root, prefix);
 
 console.log(`bootstrap: applied prefix "${prefix}"`);
@@ -67,6 +77,28 @@ async function updatePackageJson(path, newName, bundle) {
   pkg.scripts.bootstrap = "node scripts/bootstrap.mjs";
 
   await writeFile(path, `${JSON.stringify(pkg, null, 2)}\n`);
+}
+
+async function updateWorkflowBucketDefaults(path, stage, targetPrefix) {
+  const bucket = `${stage}-${targetPrefix}-sso-policies`;
+  const original = await readFile(path, "utf8");
+
+  const updated = original
+    .replace(
+      /^(\s*default:\s*)"[^"]+"(?:\s*--.*)?$/m,
+      `$1"${bucket}"`,
+    )
+    .replace(
+      /^(\s*S3_BUCKET:\s*\$\{\{\s*inputs\.s3_bucket\s*\|\|\s*')[^']+(' \}\})(?:\s*--.*)?$/m,
+      `$1${bucket}$2`,
+    );
+
+  if (updated === original) {
+    console.warn(`bootstrap: no workflow bucket updates needed for ${path}`);
+    return;
+  }
+
+  await writeFile(path, updated);
 }
 
 async function renameBundleNamespaceDir(repoRoot, targetPrefix) {
