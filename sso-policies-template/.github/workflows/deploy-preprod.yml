@@ -1,0 +1,58 @@
+name: Preprod-AWS-S3
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      s3_bucket:
+        description: "S3 bucket for the preprod bundle"
+        required: false
+        type: string
+        default: "preprod-icm-sso-policies"
+      aws_region:
+        description: "AWS region"
+        required: false
+        type: string
+        default: "us-east-1"
+      preprod_aws_role_arn:
+        description: "IAM role ARN for GitHub OIDC"
+        required: false
+        type: string
+        default: "arn:aws:iam::123456789012:role/github-oidc-preprod"
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      S3_BUCKET: ${{ inputs.s3_bucket || 'preprod-icm-sso-policies' }}
+      AWS_REGION: ${{ inputs.aws_region || 'us-east-1' }}
+      S3_BACKUP_BEFORE_DEPLOY: "1"
+      S3_BACKUP_PREFIX: backup
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ inputs.preprod_aws_role_arn || 'arn:aws:iam::123456789012:role/github-oidc-preprod' }}
+          aws-region: ${{ inputs.aws_region || 'us-east-1' }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: yarn
+
+      - run: corepack enable
+      - run: yarn install --frozen-lockfile
+      - run: yarn build
+      - run: yarn deploy
