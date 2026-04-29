@@ -20,7 +20,7 @@ This template builds and deploys an OPA bundle from `opa/bundle` to S3.
    - `yarn bootstrap <your-prefix>`
    - Example: `yarn bootstrap orbit`
    - This updates `package.json`, deployment defaults, and renames `opa/bundle/icm` to `opa/bundle/<your-prefix>` when present.
-4. Copy/update your policy and data files under `opa/bundle` (including your renamed namespace folder).
+4. After running bootstrap, set up your policies and data files under `opa/bundle` (including your renamed namespace folder).
 5. Build bundle:
    - `yarn build`
 6. Deploy bundle:
