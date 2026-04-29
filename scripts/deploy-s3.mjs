@@ -9,8 +9,8 @@ import {
 } from "@aws-sdk/client-s3";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const bucket = process.env.S3_BUCKET?.trim() || "icm-sso-policies";
-const key = process.env.S3_BUNDLE_KEY?.trim() || "icm-opa-bundle.tar.gz";
+const bucket = process.env.S3_BUCKET?.trim() || "orbit-sso-policies";
+const key = process.env.S3_BUNDLE_KEY?.trim() || "orbit-opa-bundle.tar.gz";
 const region = process.env.AWS_REGION?.trim() || "us-east-1";
 
 const backupEnabled =
@@ -18,7 +18,7 @@ const backupEnabled =
   Boolean(process.env.S3_BACKUP_PREFIX?.trim());
 const backupPrefix = process.env.S3_BACKUP_PREFIX?.trim() || "backup";
 
-const artifactPath = join(root, "icm-opa-bundle.tar.gz");
+const artifactPath = join(root, "orbit-opa-bundle.tar.gz");
 if (!existsSync(artifactPath)) {
   console.error(
     `deploy: bundle not found at ${artifactPath}. Run yarn build first.`,

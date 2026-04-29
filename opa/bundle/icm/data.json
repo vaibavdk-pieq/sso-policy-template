@@ -1,0 +1,8 @@
+{
+  "allowed_agency_ids": [1],
+  "ui_navigation_by_agency": {
+    "1": {
+      "ADMIN": ["/home", "/dashboard"]
+    }
+  }
+}

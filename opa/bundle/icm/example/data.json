@@ -1,0 +1,9 @@
+{
+  "by_agency": {
+    "1": {
+      "ADMIN": {
+        "GET": ["/health", "/api/example"]
+      }
+    }
+  }
+}
